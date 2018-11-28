@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/bayupermadi/mon-gearman/aws"
+	"github.com/bayupermadi/mon-gearmand/aws"
 )
 
 func LogSize(path string, maxSize int64) (int64, error) {
@@ -23,10 +23,10 @@ func LogSize(path string, maxSize int64) (int64, error) {
 	err := filepath.Walk(path, adjSize)
 
 	sizeInMB := size / 1000 / 1000
-	message := "Total log size beanstalkd: " + strconv.FormatInt(sizeInMB, 10) + "MB"
+	message := "Total log size gearmand: " + strconv.FormatInt(sizeInMB, 10) + "MB"
 
 	fmt.Println(message)
-	aws.CW(float64(sizeInMB), path)
+	aws.CW("Logsize", "Megabytes", float64(sizeInMB), "LogFile", path)
 
 	if sizeInMB > maxSize {
 		alert(message)

@@ -8,11 +8,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-func CW(vmetric float64, logpath string) {
+func CW(metricname string, unit string, vmetric float64, dimName string, dimValue string) {
 
-	awsKeyID := viper.Get("app.smtp.ses.aws-key-id").(string)
-	awsSecretKey := viper.Get("app.smtp.ses.aws-secret-key").(string)
-	awsRegion := viper.Get("app.smtp.ses.aws-region").(string)
+	awsKeyID := viper.Get("app.cloudwatch.aws-key-id").(string)
+	awsSecretKey := viper.Get("app.cloudwatch.aws-secret-key").(string)
+	awsRegion := viper.Get("app.cloudwatch.aws-region").(string)
 
 	setConfiguration(awsKeyID, awsSecretKey, awsRegion)
 
@@ -22,16 +22,16 @@ func CW(vmetric float64, logpath string) {
 	svc := cloudwatch.New(sess)
 
 	_, err := svc.PutMetricData(&cloudwatch.PutMetricDataInput{
-		Namespace: aws.String("Germand"),
+		Namespace: aws.String("Gearmand"),
 		MetricData: []*cloudwatch.MetricDatum{
 			&cloudwatch.MetricDatum{
-				MetricName: aws.String("LogSize"),
-				Unit:       aws.String("Megabytes"),
+				MetricName: aws.String(metricname),
+				Unit:       aws.String(unit),
 				Value:      aws.Float64(vmetric),
 				Dimensions: []*cloudwatch.Dimension{
 					&cloudwatch.Dimension{
-						Name:  aws.String("Files"),
-						Value: aws.String(logpath),
+						Name:  aws.String(dimName),
+						Value: aws.String(dimValue),
 					},
 				},
 			},

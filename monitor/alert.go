@@ -3,7 +3,7 @@ package monitor
 import (
 	"strings"
 
-	a "github.com/bayupermadi/mon-gearman/alert"
+	a "github.com/bayupermadi/mon-gearmand/alert"
 	"github.com/spf13/viper"
 )
 
