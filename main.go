@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/bayupermadi/mon-gearmand/monitor"
 	"github.com/spf13/viper"
@@ -20,11 +19,6 @@ func main() {
 	logPath := viper.Get("app.log.files").(string)
 	logMaxSize := viper.Get("app.log.max-size").(int)
 
-	for {
-
-		monitor.LogSize(logPath, int64(logMaxSize))
-
-		<-time.After(time.Second * 30)
-	}
+	monitor.LogSize(logPath, int64(logMaxSize))
 
 }

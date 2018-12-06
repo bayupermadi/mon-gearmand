@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/bayupermadi/mon-gearmand/aws"
+	"github.com/spf13/viper"
 )
 
 func LogSize(path string, maxSize int64) (int64, error) {
@@ -26,7 +27,9 @@ func LogSize(path string, maxSize int64) (int64, error) {
 	message := "Total log size gearmand: " + strconv.FormatInt(sizeInMB, 10) + "MB"
 
 	fmt.Println(message)
-	aws.CW("Logsize", "Megabytes", float64(sizeInMB), "LogFile", path)
+	if viper.GetBool("app.cloudwatch.enabled") {
+		aws.CW("Logsize", "Megabytes", float64(sizeInMB), "LogFile", path)
+	}
 
 	if sizeInMB > maxSize {
 		alert(message)
